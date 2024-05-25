@@ -1,0 +1,53 @@
+<h1> Home </h1>
+<p>This is the {{ title }} page</p>
+<div id="list"></div>
+
+<button type="button" onclick="createRoom()">create new room</button>
+
+<script>
+    var roomList = [];
+    const list = document.getElementById('list');
+    fetchData();
+    async function fetchData() {
+        try {
+            const response = await fetch(`http://localhost:8080/roomList`);
+            const data = await response.json();
+            console.log(data);
+            roomList = data;
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+        let listContainer = document.createElement('div');
+        roomList.forEach(room => {
+            const listItem = document.createElement('a');
+            listItem.textContent = `Room Name: ${room.roomName}, Room ID: ${room.roomID}`;
+            listItem.href = 'http://localhost:8080/' + room.roomID;
+            listContainer.appendChild(listItem);
+            const endl = document.createElement('br');
+            listContainer.appendChild(endl);
+        });
+        list.innerHTML = '';
+        list.appendChild(listContainer);
+    }
+
+    setInterval(fetchData, 3000);
+
+    async function createRoom() {
+        var roomName = prompt("Please enter room name", "roomName");
+        try {
+            const response = await fetch('http://localhost:8080/newRoom', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ roomName }),
+            });
+            const result = await response.json();
+            alert(result);
+            fetchData(); // Refresh the list after creating a new room
+        } catch (error) {
+            console.error('Error creating room:', error);
+        }
+    }
+
+</script>
