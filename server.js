@@ -129,7 +129,7 @@ app.post('/:roomID-delete', async (req, res) => {
 
 app.post('/:roomID/messages', async (req, res) => {
     const { message, nickName, date } = req.body;
-    console.log(req.body);
+    //console.log(req.body);
     const database = client.db('my_db');
     const collection = database.collection('messages');
     const newMsg = { 
