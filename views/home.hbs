@@ -1,8 +1,15 @@
-<h1> Home </h1>
-<p>This is the {{ title }} page</p>
-<div id="list"></div>
-
-<button type="button" onclick="createRoom()">create new room</button>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <h1>Welcome to the chatroom!</h1><br>
+    <div id="list"></div>
+    <div class="create-button">
+        <button type="button" onclick="createRoom()" style="text-align: center">Create New Room</button>
+    </div>
 
 <script>
     var roomList = [];

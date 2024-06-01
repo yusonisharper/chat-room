@@ -1,17 +1,27 @@
-<h1> Room Name: {{ roomName }}</h1>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Chatroom - {{ roomName }}</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
 
-<p>Room id: {{ roomID }}</p>
+<body>
+    <h1>Room Name: {{ roomName }}</h1>
+    <div class="welcome">
+        <p>Room ID: {{ roomID }}</p>
+        <p id="nickName">Welcome </p>
+        <h2>Messages:</h2>
+    </div>
+    <div id="msgList"></div>
+    <label for="msg">Enter message:</label>
+    <input type="text" id="msg" name="msg" required>
+    <div class="welcome">
+        <br>
+        <input type="submit" value="Submit" onclick="newMsg()">
+        <br>
+        <button type="button" style = "background-color:rgb(227, 5, 5)"onclick="deleteRoom('{{roomID}}')">Delete Room</button>
+    </div>
 
-<p id="nickName">Welcome </p>
-
-<h2> Messages: </h2>
-<div id="msgList"></div>
-
-<label for="msg">New message:</label><input type="text" id="msg" name="msg" required>
-<input type="submit" value="Submit" onclick="newMsg()">
-<br>
-<br>
-<button type="button" onclick="deleteRoom('{{roomID}}')">delete room</button>
 
 <script>
     var nickName = prompt("Please enter your name", "nickName");
