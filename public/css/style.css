@@ -1,1 +1,86 @@
-/* TODO: style each page */
+body {
+  font-family: 'Times New Roman', Times, serif;
+  margin: 0;
+  padding: 0;
+  background-image: url('/111.jpg');
+  background-size: cover;
+}
+
+h1 {
+  text-align: center;
+  color:#000000;
+  size: 1.5em;
+}
+
+h2 {
+  text-align: center;
+}
+
+#list, #msgList {
+  margin: 20px auto;
+  width: 80%;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+  display: inline-block;
+  margin-top: 20px;
+}
+
+input[type="text"] {
+  width: calc(100% - 120px);
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #ffffff00;
+  box-sizing: border-box;
+}
+
+input[type="submit"] {
+  padding: 10px 20px;
+  margin: 10px 0;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+input[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 20px 0;
+  background-color: #03c45a;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.create-button {
+  display: flex;
+  justify-content: center;
+}
+
+button:hover {
+  background-color: #949494;
+}
+
+a {
+  display: block;
+  padding: 10px;
+  color: #007bff;
+  border-bottom: 1px solid #ddd;
+}
+
+a:hover {
+  background-color: #f1f1f1;
+}
+
+.welcome {
+    text-align: center;
+}
