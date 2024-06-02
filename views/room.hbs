@@ -10,8 +10,11 @@
     <div class="welcome">
         <p>Room ID: {{ roomID }}</p>
         <p id="nickName">Welcome </p>
-        <h2>Messages:</h2>
     </div>
+    <label for="search">Search message:</label>
+    <input type="text" id="search" name="search" required>
+    <button type="button" onclick="searchMsg()">SEARCH</button>
+    <h2>Messages:</h2>
     <div id="msgList"></div>
     <label for="msg">Enter message:</label>
     <input type="text" id="msg" name="msg" required>
@@ -19,74 +22,141 @@
         <br>
         <input type="submit" value="Submit" onclick="newMsg()">
         <br>
-        <button type="button" style = "background-color:rgb(227, 5, 5)"onclick="deleteRoom('{{roomID}}')">Delete Room</button>
+        <button type="button" style="background-color:rgb(227, 5, 5)" onclick="deleteRoom('{{roomID}}')">Delete
+            Room</button>
     </div>
 
 
-<script>
-    var nickName = prompt("Please enter your name", "nickName");
-    if (nickName != null) {
-        document.getElementById("nickName").innerHTML +=
-            nickName + "!";
-    }
-    var msgList = [];
-    const msg = document.getElementById('msgList');
-    async function fetchData() {
-        try {
-            const response = await fetch(`http://localhost:8080/{{roomID}}/messages`);
-            const data = await response.json();
-            msgList = data;
-            console.log(data);
-        } catch (error) {
-            console.error('Error fetching data:', error);
+    <script>
+        var nickName = prompt("Please enter your name", "nickName");
+        if (nickName != null) {
+            document.getElementById("nickName").innerHTML +=
+                nickName + "!";
         }
-        let msgContainer = document.createElement('div');
-        msgList.forEach(msg => {
-            const msgItem = document.createElement('a');
-            const date = new Date(msg.created_date);
-            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
-            const prettyDate = date.toLocaleDateString('en-US', options);
-            msgItem.textContent = `${msg.name}: ${msg.body}     -     ${prettyDate}`;
-            msgContainer.appendChild(msgItem);
-            const endl = document.createElement('br');
-            msgContainer.appendChild(endl);
-        });
-        msg.innerHTML = '';
-        msg.appendChild(msgContainer);
-    }
-    setInterval(fetchData, 3000);
-    fetchData();
-
-    async function newMsg() {
-        const msgInput = document.getElementById('msg');
-        const message = msgInput.value;
-        try {
-            let date = new Date();
-            const response = await fetch('http://localhost:8080/{{roomID}}/messages', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ message, nickName, date }),
+        var msgList = [];
+        var searchText = '';
+        const msg = document.getElementById('msgList');
+        async function fetchData() {
+            try {
+                const response = await fetch(`http://localhost:8080/{{roomID}}/messages`);
+                const data = await response.json();
+                msgList = data;
+                console.log(data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+            let msgContainer = document.createElement('div');
+            msgList.forEach(msg => {
+                //message text
+                const msgText = document.createElement('a');
+                const date = new Date(msg.created_date);
+                const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+                const prettyDate = date.toLocaleDateString('en-US', options);
+                msgText.textContent = `${msg.name}: ${msg.body}     -     ${prettyDate}`;
+                msgText.id = msg._id;
+                //message edit button
+                const editButton = document.createElement('button');
+                editButton.textContent = 'EDIT';
+                editButton.onclick = function () {
+                    let text = prompt("Please enter new text", msg.body);
+                    updateMsg('{{roomID}}', msg._id, text);
+                };
+                //message delete button
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'DELETE';
+                deleteButton.onclick = function () { deleteMsg('{{roomID}}', msg._id) };
+                deleteButton.style = "background-color:rgb(227, 5, 5)";
+                const msgItem = document.createElement('div');
+                msgItem.style = "display: flex";
+                msgItem.appendChild(msgText);
+                if (nickName == msg.name) {
+                    msgItem.appendChild(editButton);
+                    msgItem.appendChild(deleteButton);
+                }
+                if (searchText == '' || msg.body.includes(searchText)) {
+                    msgContainer.appendChild(msgItem);
+                    const endl = document.createElement('br');
+                    msgContainer.appendChild(endl);
+                }
             });
-            msgInput.value = '';
-            fetchData(); // Refresh the msgList after sent new msg
-        } catch (error) {
-            console.error('Error sending message:', error);
+            msg.innerHTML = '';
+            msg.appendChild(msgContainer);
+            console.log(searchText);
         }
-    }
+        setInterval(fetchData, 3000);
+        fetchData();
 
-    async function deleteRoom(roomID) {
-        try {
-            const response = await fetch(`http://localhost:8080/${roomID}-delete`, {
-                method: 'POST',
-            });
-            const result = await response.json();
-            console.log(result);
-            alert(result);
-            window.location.href = 'http://localhost:8080/';
-        } catch (error) {
-            console.error('Error deleting room:', error);
+        async function newMsg() {
+            const msgInput = document.getElementById('msg');
+            const message = msgInput.value;
+            try {
+                let date = new Date();
+                const response = await fetch('http://localhost:8080/{{roomID}}/messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message, nickName, date }),
+                });
+                msgInput.value = '';
+                fetchData(); // Refresh the msgList after sent new msg
+            } catch (error) {
+                console.error('Error sending message:', error);
+            }
         }
-    }
-</script>
+
+        async function deleteRoom(roomID) {
+            try {
+                const response = await fetch(`http://localhost:8080/${roomID}-delete`, {
+                    method: 'POST',
+                });
+                const result = await response.json();
+                console.log(result);
+                alert(result);
+                window.location.href = 'http://localhost:8080/';
+            } catch (error) {
+                console.error('Error deleting room:', error);
+            }
+        }
+        async function deleteMsg(roomID, msgID) {
+            try {
+                const response = await fetch(`http://localhost:8080/${roomID}/messages-delete`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ msgID: msgID }),
+                });
+                const result = await response.json();
+                console.log(result);
+                fetchData();
+            } catch (error) {
+                console.error('Error deleting message:', error);
+            }
+        }
+
+        async function searchMsg() {
+            const searchInput = document.getElementById('search');
+            const text = searchInput.value;
+            searchText = (text === undefined) ? '' : text;
+            console.log(searchText);
+            fetchData();
+        }
+
+        async function updateMsg(roomID, msgID, text) {
+            try {
+                const response = await fetch(`http://localhost:8080/${roomID}/messages-update`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ msgID: msgID, text: text }),
+                });
+                const result = await response.json();
+                console.log(result);
+                fetchData();
+            } catch (error) {
+                console.error('Error updating message:', error);
+            }
+        }
+    </script>
