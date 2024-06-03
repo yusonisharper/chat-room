@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -11,11 +12,13 @@
             top: 10px;
             right: 10px;
         }
+
         .auth-buttons button {
             margin-left: 10px;
         }
     </style>
 </head>
+
 <body>
     <div class="auth-buttons" id="auth-buttons">
         {{#if username}}
@@ -27,10 +30,14 @@
         <button type="button" onclick="logIn()">Log In</button>
         {{/if}}
     </div>
-    <h1>Welcome to the chatroom!</h1><br>
+    <h1>Welcome to your homepage, {{username}}!</h1><br>
     <div id="list"></div>
     <div class="create-button">
+        {{#if username}}
         <button type="button" onclick="createRoom()" style="text-align: center">Create New Room</button>
+        {{else}}
+        <button type="button" onclick="promptLogin()">Create New Room</button>
+        {{/if}}
     </div>
 
     <script>
@@ -59,7 +66,12 @@
             roomList.forEach(room => {
                 const listItem = document.createElement('a');
                 listItem.textContent = `Room Name: ${room.roomName}, Room ID: ${room.roomID}`;
+                {{#if username}}
                 listItem.href = 'http://localhost:8080/' + room.roomID;
+                {{else}}
+                listItem.href = 'javascript:void(0);'; // Disabling link if not logged in
+                listItem.onclick = promptLogin; // Prompt login when clicked if not logged in
+                {{/if}}
                 listContainer.appendChild(listItem);
                 const endl = document.createElement('br');
                 listContainer.appendChild(endl);
@@ -92,6 +104,11 @@
             } else {
                 alert('Room name cannot be empty');
             }
+        }
+
+        // Function for prompting login
+        function promptLogin() {
+            alert("You must login first");
         }
 
         // Function for Sign Up
@@ -164,20 +181,13 @@
         }
 
         // Function to log out
-        async function logOut() {
+        function logOut() {
             localStorage.removeItem('token');
-            try {
-                const response = await fetch('/logout', {
-                    method: 'POST',
-                });
-                const result = await response.json();
-                alert(result.message);
-                window.location.href = '/'; // Redirect to the homepage
-            } catch (error) {
-                console.error('Error logging out:', error);
-                alert('Error logging out');
-            }
+            alert('Logged out successfully');
+            window.location.href = '/'; // Redirect to the homepage
         }
+
     </script>
 </body>
+
 </html>
