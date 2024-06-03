@@ -226,11 +226,15 @@ client.connect().then(() => {
     });
 
     // User homepage route
-app.get('/user/:username', (req, res) => {
-    const { username } = req.params;
-    res.render('user_home', { title: 'Home', username }); // Render a new template user_home.hbs
-});
+    app.get('/user/:username', (req, res) => {
+        const { username } = req.params;
+        res.render('user_home', { title: 'Home', username }); // Render a new template user_home.hbs
+    });
 
+    app.post('/logout', (req, res) => {
+        // Clear any server-side session or cookies here if necessary
+        res.json({ message: 'Logged out successfully' });
+    });
 
     app.listen(port, () => console.log(`Server listening on http://localhost:${port}`));
 }).catch(err => {

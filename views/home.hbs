@@ -118,36 +118,35 @@
         }
 
         // Function for Log In
-      
-async function logIn() {
-    var username = prompt("Please enter username", "username");
-    var password = prompt("Please enter password", "password");
-    if (username && password) {
-        try {
-            const response = await fetch('http://localhost:8080/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, password }),
-            });
-            const result = await response.json();
-            if (result.token) {
-                alert('Log In successful');
-                // Save token and update UI
-                localStorage.setItem('token', result.token);
-                updateAuthUI(result.username);
-                window.location.href = `http://localhost:8080/user/${result.username}`; // Redirect to the new URL
+        async function logIn() {
+            var username = prompt("Please enter username", "username");
+            var password = prompt("Please enter password", "password");
+            if (username && password) {
+                try {
+                    const response = await fetch('http://localhost:8080/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ username, password }),
+                    });
+                    const result = await response.json();
+                    if (result.token) {
+                        alert('Log In successful');
+                        // Save token and update UI
+                        localStorage.setItem('token', result.token);
+                        updateAuthUI(result.username);
+                        window.location.href = `http://localhost:8080/user/${result.username}`; // Redirect to the new URL
+                    } else {
+                        alert(result.error || 'Log In failed');
+                    }
+                } catch (error) {
+                    console.error('Error logging in:', error);
+                }
             } else {
-                alert(result.error || 'Log In failed');
+                alert('Username and password cannot be empty');
             }
-        } catch (error) {
-            console.error('Error logging in:', error);
         }
-    } else {
-        alert('Username and password cannot be empty');
-    }
-}
 
         // Function to update auth UI after login
         function updateAuthUI(username) {
@@ -165,10 +164,19 @@ async function logIn() {
         }
 
         // Function to log out
-        function logOut() {
+        async function logOut() {
             localStorage.removeItem('token');
-            alert('Logged out successfully');
-            location.reload(); // Reload the page to reset the UI
+            try {
+                const response = await fetch('/logout', {
+                    method: 'POST',
+                });
+                const result = await response.json();
+                alert(result.message);
+                window.location.href = '/'; // Redirect to the homepage
+            } catch (error) {
+                console.error('Error logging out:', error);
+                alert('Error logging out');
+            }
         }
     </script>
 </body>
