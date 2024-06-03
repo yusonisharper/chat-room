@@ -5,11 +5,17 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <h1>Welcome to the chatroom!</h1><br>
-    <div id="list"></div>
-    <div class="create-button">
-        <button type="button" onclick="createRoom()" style="text-align: center">Create New Room</button>
+
+    <div class="home-header">
+        <h1>Chatroom</h1><br>
     </div>
+
+    <div class="list-container">
+        <div id="list"></div>
+    </div>
+    
+    <button onclick="createRoom()" class="create-button"></button>
+
 
 <script>
     var roomList = [];
@@ -26,12 +32,24 @@
         }
         let listContainer = document.createElement('div');
         roomList.forEach(room => {
-            const listItem = document.createElement('a');
-            listItem.textContent = `Room Name: ${room.roomName}, Room ID: ${room.roomID}`;
-            listItem.href = 'http://localhost:8080/' + room.roomID;
+            const listItem = document.createElement('div');
+            listItem.classList.add('room-item');
+
+            const roomName = document.createElement('span');
+            roomName.classList.add('room-name');
+            roomName.textContent = room.roomName;
+
+            const roomID = document.createElement('span');
+            roomID.classList.add('room-id');
+            roomID.textContent = '#' + room.roomID;
+
+            listItem.appendChild(roomName);
+            listItem.appendChild(roomID);
+            listItem.onclick = function() {
+                window.location.href = 'http://localhost:8080/' + room.roomID;
+            };
+
             listContainer.appendChild(listItem);
-            const endl = document.createElement('br');
-            listContainer.appendChild(endl);
         });
         list.innerHTML = '';
         list.appendChild(listContainer);
@@ -58,3 +76,5 @@
     }
 
 </script>
+</body>
+</html>
