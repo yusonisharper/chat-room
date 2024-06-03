@@ -27,7 +27,7 @@
         <button type="button" onclick="logIn()">Log In</button>
         {{/if}}
     </div>
-    <h1>Welcome to the chatroom!</h1><br>
+    <h1>Welcome to your homepage, {{username}}!</h1><br>
     <div id="list"></div>
     <div class="create-button">
         <button type="button" onclick="createRoom()" style="text-align: center">Create New Room</button>
@@ -118,36 +118,35 @@
         }
 
         // Function for Log In
-      
-async function logIn() {
-    var username = prompt("Please enter username", "username");
-    var password = prompt("Please enter password", "password");
-    if (username && password) {
-        try {
-            const response = await fetch('http://localhost:8080/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, password }),
-            });
-            const result = await response.json();
-            if (result.token) {
-                alert('Log In successful');
-                // Save token and update UI
-                localStorage.setItem('token', result.token);
-                updateAuthUI(result.username);
-                window.location.href = `http://localhost:8080/user/${result.username}`; // Redirect to the new URL
+        async function logIn() {
+            var username = prompt("Please enter username", "username");
+            var password = prompt("Please enter password", "password");
+            if (username && password) {
+                try {
+                    const response = await fetch('http://localhost:8080/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ username, password }),
+                    });
+                    const result = await response.json();
+                    if (result.token) {
+                        alert('Log In successful');
+                        // Save token and update UI
+                        localStorage.setItem('token', result.token);
+                        updateAuthUI(result.username);
+                        window.location.href = `http://localhost:8080/user/${result.username}`; // Redirect to the new URL
+                    } else {
+                        alert(result.error || 'Log In failed');
+                    }
+                } catch (error) {
+                    console.error('Error logging in:', error);
+                }
             } else {
-                alert(result.error || 'Log In failed');
+                alert('Username and password cannot be empty');
             }
-        } catch (error) {
-            console.error('Error logging in:', error);
         }
-    } else {
-        alert('Username and password cannot be empty');
-    }
-}
 
         // Function to update auth UI after login
         function updateAuthUI(username) {
