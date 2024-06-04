@@ -163,8 +163,10 @@
 
         // Function to view profile
         function viewProfile() {
-            alert('Profile page not implemented yet.');
+            const username = '{{username}}';
+            window.location.href = `/user/${username}/profile`;
         }
+
 
         // Function to log out
         function logOut() {

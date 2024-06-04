@@ -30,7 +30,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // If you choose not to use handlebars as template engine, you can safely delete the following part and use your own way to render content
 // view engine setup
-app.engine('hbs', hbs({ extname: 'hbs', defaultLayout: 'layout', layoutsDir: path.join(__dirname, 'views/layouts/') }));
+app.engine('hbs', hbs({
+    extname: 'hbs',
+    defaultLayout: 'layout',
+    layoutsDir: path.join(__dirname, 'views/layouts/'),
+    helpers: {
+        eq: (a, b) => a === b
+    }
+}));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
@@ -235,6 +242,51 @@ client.connect().then(() => {
         // Clear any server-side session or cookies here if necessary
         res.json({ message: 'Logged out successfully' });
     });
+
+    app.get('/user/:username/profile', async (req, res) => {
+        const { username } = req.params;
+
+        try {
+            const database = client.db('my_db');
+            const collection = database.collection('users');
+            const user = await collection.findOne({ username });
+
+            if (user) {
+                res.render('profile', { 
+                    title: 'Profile', 
+                    username, 
+                    gender: user.gender || '', 
+                    age: user.age || '', 
+                    introduction: user.introduction || '' 
+                });
+            } else {
+                res.status(404).send('User not found');
+            }
+        } catch (error) {
+            console.error('Error fetching user profile:', error);
+            res.status(500).json({ error: 'Error fetching user profile' });
+        }
+    });
+
+    app.post('/user/:username/profile/update', async (req, res) => {
+        const { username } = req.params;
+        const { gender, age, introduction } = req.body;
+
+        try {
+            const database = client.db('my_db');
+            const collection = database.collection('users');
+            await collection.updateOne(
+                { username },
+                { $set: { gender, age, introduction } }
+            );
+            res.redirect(`/user/${username}`);
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            res.status(500).json({ error: 'Error updating profile' });
+        }
+    });
+
+    
 
     app.listen(port, () => console.log(`Server listening on http://localhost:${port}`));
 }).catch(err => {
