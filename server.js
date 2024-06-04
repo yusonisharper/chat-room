@@ -7,10 +7,6 @@ const jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 const homeHandler = require('./controllers/home.js');
-var roomList = [];
-const getRoomList = () => roomList;
-const roomHandler = require('./controllers/room.js')(getRoomList);
-
 const app = express();
 const port = 8080;
 
@@ -28,8 +24,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// If you choose not to use handlebars as template engine, you can safely delete the following part and use your own way to render content
-// view engine setup
 app.engine('hbs', hbs({
     extname: 'hbs',
     defaultLayout: 'layout',
@@ -62,9 +56,8 @@ app.get('/RoomList', async (req, res) => {
         } else {
             let list = [];
             await cursor.forEach(item => { list.push(item) });
-            roomList = list;
+            res.json(list);
         }
-        res.json(roomList);
     } catch (error) {
         console.error('Error fetching room list:', error);
         res.status(500).json({ error: 'Error fetching room list' });
@@ -95,9 +88,31 @@ async function handleMessageRequest(req, res) {
 }
 app.get('/:roomID/messages', handleMessageRequest);
 
-app.get('/:roomID', roomHandler.getRoom);
+app.get('/:roomID', async (req, res) => {
+    const { roomID } = req.params;
+    const token = req.cookies.token;
+    
+    if (!token) {
+        return res.status(401).send('Unauthorized');
+    }
+    
+    try {
+        const decoded = jwt.verify(token, secretKey);
+        const database = client.db('my_db');
+        const userCollection = database.collection('users');
+        const user = await userCollection.findOne({ _id: new ObjectId(decoded.userId) });
+        
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+        
+        res.render('room', { roomID, roomName: 'Some Room Name', username: user.username });
+    } catch (error) {
+        console.error('Error fetching room data:', error);
+        res.status(500).json({ error: 'Error fetching room data' });
+    }
+});
 
-///////////////////////////////////post endpoint/////////////////////////////////////////////////////////////////
 const roomGenerator = require('./util/roomIdGenerator.js');
 app.post('/newRoom', async (req, res) => {
     try {
@@ -110,7 +125,7 @@ app.post('/newRoom', async (req, res) => {
         };
         const result = await collection.insertOne(newRoom);
         console.log(`New room created with the following id: ${result.insertedId}`);
-        res.json('new room created');
+        res.json({ message: 'new room created' });
     } catch (error) {
         console.error('Error creating new room:', error);
         res.status(500).json({ error: 'Error creating new room' });
@@ -124,9 +139,9 @@ app.post('/:roomID-delete', async (req, res) => {
         const query = { 'roomID': req.params.roomID };
         const result = await collection.deleteOne(query);
         if (result.deletedCount === 1) {
-            res.json('room deleted');
+            res.json({ message: 'room deleted' });
         } else {
-            res.status(404).json('room not found');
+            res.status(404).json({ error: 'room not found' });
         }
     } catch (error) {
         console.error('Error deleting room:', error);
@@ -141,9 +156,9 @@ app.post('/:roomID/messages-delete', async (req, res) => {
         const query = { '_id': new ObjectId(req.body.msgID) };
         const result = await collection.deleteOne(query);
         if (result.deletedCount === 1) {
-            res.json('message deleted');
+            res.json({ message: 'message deleted' });
         } else {
-            res.status(404).json('msg not found');
+            res.status(404).json({ error: 'msg not found' });
         }
     } catch (error) {
         console.error('Error deleting message:', error);
@@ -159,9 +174,9 @@ app.post('/:roomID/messages-update', async (req, res) => {
         const update = { $set: { body: req.body.text } };
         const result = await collection.updateOne(query, update);
         if (result.modifiedCount === 1) {
-            res.json('message updated');
+            res.json({ message: 'message updated' });
         } else {
-            res.status(404).json('msg not found');
+            res.status(404).json({ error: 'msg not found' });
         }
     } catch (error) {
         console.error('Error updating message:', error);
@@ -181,14 +196,13 @@ app.post('/:roomID/messages', async (req, res) => {
             created_date: date
         };
         const result = await collection.insertOne(newMsg);
-        res.json('message sent');
+        res.json({ message: 'message sent' });
     } catch (error) {
         console.error('Error sending message:', error);
         res.status(500).json({ error: 'Error sending message' });
     }
 });
 
-////////////////////// User Authentication //////////////////////
 client.connect().then(() => {
     const database = client.db('my_db');
     const userCollection = database.collection('users');
@@ -220,6 +234,7 @@ client.connect().then(() => {
                 return res.status(400).json({ error: 'Invalid username or password' });
             }
             const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '1h' });
+            res.cookie('token', token, { httpOnly: true });
             res.json({ message: 'Logged in successfully', token, username: user.username });
         } catch (error) {
             console.error('Error logging in:', error);
@@ -240,6 +255,7 @@ client.connect().then(() => {
 
     app.post('/logout', (req, res) => {
         // Clear any server-side session or cookies here if necessary
+        res.clearCookie('token');
         res.json({ message: 'Logged out successfully' });
     });
 
@@ -247,9 +263,7 @@ client.connect().then(() => {
         const { username } = req.params;
 
         try {
-            const database = client.db('my_db');
-            const collection = database.collection('users');
-            const user = await collection.findOne({ username });
+            const user = await userCollection.findOne({ username });
 
             if (user) {
                 res.render('profile', { 
@@ -273,9 +287,7 @@ client.connect().then(() => {
         const { gender, age, introduction } = req.body;
 
         try {
-            const database = client.db('my_db');
-            const collection = database.collection('users');
-            await collection.updateOne(
+            await userCollection.updateOne(
                 { username },
                 { $set: { gender, age, introduction } }
             );
@@ -285,8 +297,6 @@ client.connect().then(() => {
             res.status(500).json({ error: 'Error updating profile' });
         }
     });
-
-    
 
     app.listen(port, () => console.log(`Server listening on http://localhost:${port}`));
 }).catch(err => {
