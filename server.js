@@ -100,13 +100,19 @@ app.get('/:roomID', async (req, res) => {
         const decoded = jwt.verify(token, secretKey);
         const database = client.db('my_db');
         const userCollection = database.collection('users');
+        const roomCollection = database.collection('rooms');
         const user = await userCollection.findOne({ _id: new ObjectId(decoded.userId) });
-        
+        const room = await roomCollection.findOne({ roomID: roomID });
+
         if (!user) {
             return res.status(404).send('User not found');
         }
+
+        if (!room) {
+            return res.status(404).send('Room not found');
+        }
         
-        res.render('room', { roomID, roomName: 'Some Room Name', username: user.username });
+        res.render('room', { roomID, roomName: room.roomName, username: user.username });
     } catch (error) {
         console.error('Error fetching room data:', error);
         res.status(500).json({ error: 'Error fetching room data' });
