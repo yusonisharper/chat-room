@@ -1,5 +1,5 @@
 body {
-  font-family:Arial, Helvetica, sans-serif
+  font-family: Arial, Helvetica, sans-serif
   margin: 0;
   padding: 0;
   background-color: #f9f9f9;
@@ -15,8 +15,27 @@ h2 {
   color:#000000;
 }
 
+h3 {
+  position: absolute;
+  color: #000000;
+  top: 22%; 
+  left: 40%;
+  font-size: 1.7em;
+}
+
+h4 {
+  position: absolute;
+  color: #000000;
+  top: 22%; 
+  left: 55%;
+  font-size: 1.7em;
+}
+
 #msgList {
-  height: 60vh;
+  position: fixed;
+  top: 26%; 
+  left: 10%;
+  height: 57vh;
   overflow-y: auto; 
   margin: 20px auto;
   width: 80%;
@@ -150,7 +169,7 @@ a:hover {
 
 .msg-bottom {
   position: fixed;
-  bottom: 2%; 
+  bottom: 1%; 
   left: 15%;
   width: 68%; 
   background-color: #ffffff;
@@ -182,6 +201,7 @@ a:hover {
   background-image: url('/send.jpg'); 
   background-size: cover;
   border: none;
+  outline: none;
   cursor: pointer;
 }
 
@@ -234,4 +254,143 @@ a:hover {
   margin: 0;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
+}
+
+.search-message {
+  position: absolute;
+  top: 19%; 
+  left: 15%;
+  width: 68%; 
+  background-color: #ffffff;
+  padding: 10px;
+  border-radius: 25px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.search-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px; 
+  height: 30px;
+  border-radius: 50%;
+  background-image: url('/search.jpg'); 
+  background-size: cover;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.profile-button {
+  position: absolute;
+  top: 270px;
+  right: 590px;
+  width: 200px; 
+  height: 200px;
+  border-radius: 50%;
+  background-image: url('/profile.png'); 
+  background-size: cover;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.logout-button {
+  position: absolute;
+  top: 270px;
+  right: 290px;
+  width: 200px; 
+  height: 200px;
+  border-radius: 50%;
+  background-image: url('/logout.jpg'); 
+  background-size: cover;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.login-button {
+  position: absolute;
+  top: 270px;
+  right: 590px;
+  width: 200px; 
+  height: 200px;
+  border-radius: 50%;
+  background-image: url('/login.png'); 
+  background-size: cover;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.signup-button {
+  position: absolute;
+  top: 270px;
+  right: 290px;
+  width: 200px; 
+  height: 200px;
+  border-radius: 50%;
+  background-image: url('/signup.png'); 
+  background-size: cover;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.My-Profile {
+  position: absolute;
+  color: #000000;
+  top: 73%; 
+  left: 41%;
+  font-size: 1.4em;
+}
+
+.Log-In {
+  position: absolute;
+  color: #000000;
+  top: 73%; 
+  left: 42%;
+  font-size: 1.4em;
+}
+
+.Log-Out {
+  position: absolute;
+  color: #000000;
+  top: 73%; 
+  left: 65%;
+  font-size: 1.4em;
+}
+
+.profile-container {
+  position: absolute;
+  top: 35%;
+  left: 36%;
+  height: 60vh;
+  overflow-y: auto; 
+  width: 50%;
+  background-color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.profile {
+  font-size: 1.2em;
+  margin-left: 5px;
+  text-align: center;
+}
+
+.goback-button {
+  position: absolute;
+  top: 22%;
+  left: 25%;
+  width: 60px; 
+  height: 60px;
+  border-radius: 50%;
+  background-image: url('/333.jpg'); 
+  background-size: cover;
+  border: none;
+  cursor: pointer;
 }
