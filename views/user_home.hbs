@@ -6,96 +6,95 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>{{ title }}</title>
     <link rel="stylesheet" href="/css/style.css">
-    <style>
-        .auth-buttons {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-        }
-
-        .auth-buttons button {
-            margin-left: 10px;
-        }
-    </style>
 </head>
 
 <body>
-    <div class="auth-buttons" id="auth-buttons">
-        {{#if username}}
-        <span>Welcome, {{username}}</span>
-        <button type="button" onclick="viewProfile()">My Profile</button>
-        <button type="button" onclick="logOut()">Log Out</button>
-        {{else}}
-        <button type="button" onclick="signUp()">Sign Up</button>
-        <button type="button" onclick="logIn()">Log In</button>
-        {{/if}}
+    <div class="home-header">
+        <h1>Chatroom</h1><br>
     </div>
-    <h1>Welcome to your homepage, {{username}}!</h1><br>
-    <div id="list"></div>
-    <div class="create-button">
-        <button type="button" onclick="createRoom()" style="text-align: center">Create New Room</button>
+
+    <div class="list-container">
+        <div id="list"></div>
+    </div>
+    
+    <button onclick="createRoom()" class="create-button"></button>
+
+    <h3>Welcome to your homepage, {{username}}!</h3><br>
+    <div class="My-Profile">
+        <span>My Profile</span>
+    </div>
+
+    <div class="Log-Out">
+        <span>Log Out</span>
+    </div>
+
+    <div>
+        {{#if username}}
+        <button type="button" class="profile-button" onclick="viewProfile()"></button>
+        <button type="button" class="logout-button" onclick="logOut()"></button>
+        {{else}}
+        <button type="button" class="signup-button" onclick="signUp()"></button>
+        <button type="button" class="login-button" onclick="logIn()"></button>
+        {{/if}}
     </div>
 
     <script>
         var roomList = [];
-        const list = document.getElementById('list');
-
-        // Fetch initial data
-        fetchData();
-
-        // Function to fetch room data from server
-        async function fetchData() {
-            try {
-                const response = await fetch(`http://localhost:8080/RoomList`);
-                const data = await response.json();
-                console.log(data);
-                roomList = data;
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-            updateRoomList();
+    const list = document.getElementById('list');
+    fetchData();
+    async function fetchData() {
+        try {
+            const response = await fetch(`http://localhost:8080/roomList`);
+            const data = await response.json();
+            console.log(data);
+            roomList = data;
+        } catch (error) {
+            console.error('Error fetching data:', error);
         }
+        let listContainer = document.createElement('div');
+        roomList.forEach(room => {
+            const listItem = document.createElement('div');
+            listItem.classList.add('room-item');
 
-        // Function to update the room list in the DOM
-        function updateRoomList() {
-            let listContainer = document.createElement('div');
-            roomList.forEach(room => {
-                const listItem = document.createElement('a');
-                listItem.textContent = `Room Name: ${room.roomName}, Room ID: ${room.roomID}`;
-                listItem.href = 'http://localhost:8080/' + room.roomID;
-                listContainer.appendChild(listItem);
-                const endl = document.createElement('br');
-                listContainer.appendChild(endl);
+            const roomName = document.createElement('span');
+            roomName.classList.add('room-name');
+            roomName.textContent = room.roomName;
+
+            const roomID = document.createElement('span');
+            roomID.classList.add('room-id');
+            roomID.textContent = '#' + room.roomID;
+
+            listItem.appendChild(roomName);
+            listItem.appendChild(roomID);
+            listItem.onclick = function() {
+                window.location.href = 'http://localhost:8080/' + room.roomID;
+            };
+
+            listContainer.appendChild(listItem);
+        });
+        list.innerHTML = '';
+        list.appendChild(listContainer);
+    }
+
+    setInterval(fetchData, 3000);
+
+    async function createRoom() {
+        var roomName = prompt("Please enter room name", "roomName");
+        try {
+            const response = await fetch('http://localhost:8080/newRoom', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ roomName }),
             });
-            list.innerHTML = '';
-            list.appendChild(listContainer);
+            const result = await response.json();
+            alert(result);
+            fetchData();
+        } catch (error) {
+            console.error('Error creating room:', error);
         }
-
-        // Set interval to refresh room list every 3 seconds
-        setInterval(fetchData, 3000);
-
-        // Function to create a new room
-        async function createRoom() {
-            var roomName = prompt("Please enter room name", "roomName");
-            if (roomName) {
-                try {
-                    const response = await fetch('http://localhost:8080/newRoom', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ roomName }),
-                    });
-                    const result = await response.json();
-                    alert(result.message || 'Room created successfully');
-                    fetchData(); // Refresh the list after creating a new room
-                } catch (error) {
-                    console.error('Error creating room:', error);
-                }
-            } else {
-                alert('Room name cannot be empty');
-            }
-        }
+    }
 
         // Function for Sign Up
         async function signUp() {

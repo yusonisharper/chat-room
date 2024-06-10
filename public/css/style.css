@@ -1,40 +1,53 @@
 body {
-  font-family: 'Times New Roman', Times, serif;
+  font-family: Arial, Helvetica, sans-serif
   margin: 0;
   padding: 0;
-  background-image: url('/111.jpg');
-  background-size: cover;
+  background-color: #f9f9f9;
 }
 
 h1 {
   text-align: center;
-  color:#000000;
-  size: 1.5em;
+  color:#ffffff;
 }
 
 h2 {
   text-align: center;
+  color:#000000;
 }
 
-#list, #msgList {
+h3 {
+  position: absolute;
+  color: #000000;
+  top: 22%; 
+  left: 40%;
+  font-size: 1.7em;
+}
+
+h4 {
+  position: absolute;
+  color: #000000;
+  top: 22%; 
+  left: 55%;
+  font-size: 1.7em;
+}
+
+#msgList {
+  position: fixed;
+  top: 26%; 
+  left: 10%;
+  height: 57vh;
+  overflow-y: auto; 
   margin: 20px auto;
   width: 80%;
   padding: 10px;
-  border-radius: 5px;
+  background-color: #ffffff;
+  border-radius: 25px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-label {
-  display: inline-block;
-  margin-top: 20px;
-}
-
 input[type="text"] {
-  width: calc(100% - 120px);
-  padding: 10px;
-  margin: 10px 0;
-  background-color: #ffffff00;
-  box-sizing: border-box;
+  border: none;
+  outline: none;
 }
 
 input[type="submit"] {
@@ -51,19 +64,17 @@ input[type="submit"]:hover {
   background-color: #0056b3;
 }
 
-button {
-  padding: 10px 20px;
-  margin: 20px 0;
-  background-color: #03c45a;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
 .create-button {
-  display: flex;
-  justify-content: center;
+  position: absolute;
+  bottom: 30px;
+  left: 105px;
+  width: 40px; 
+  height: 40px;
+  border-radius: 50%;
+  background-image: url('/create.jpg'); 
+  background-size: cover;
+  border: none;
+  cursor: pointer;
 }
 
 button:hover {
@@ -82,5 +93,304 @@ a:hover {
 }
 
 .welcome {
-    text-align: center;
+  text-align: center;
+}
+
+.msg-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.msg-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  padding: 0 10px;
+}
+
+.msg-user {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.msg-date {
+  color: #888;
+  font-size: 0.9em;
+}
+
+.msg-bubble {
+  background-color: #f1f1f1;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: fit-content;
+  max-width: 80%;
+  word-wrap: break-word;
+}
+
+.msg-header {
+  border: 1px solid #ccc;
+  width: 100%;
+  height: 10%;
+  border-bottom: none;
+  display: inline-block;
+  background-color: #ffffff;
+  margin: 0;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+.back-button {
+  position: absolute;
+  top: 23px;
+  left: 10px;
+  width: 60px; 
+  height: 60px;
+  border-radius: 50%;
+  background-image: url('/333.jpg'); 
+  background-size: cover;
+  border: none;
+  cursor: pointer;
+}
+
+.delete-button {
+  position: absolute;
+  top: 23px;
+  right: 10px;
+  width: 60px; 
+  height: 60px;
+  border-radius: 50%;
+  background-image: url('/delete.jpg'); 
+  background-size: cover;
+  border: none;
+  cursor: pointer;
+}
+
+.msg-bottom {
+  position: fixed;
+  bottom: 1%; 
+  left: 15%;
+  width: 68%; 
+  background-color: #ffffff;
+  padding: 10px;
+  border-radius: 25px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.input-group {
+  display: flex; 
+  align-items: center;
+}
+
+.form-control {
+  flex: 1;
+  border: none;
+  border-radius: 20px;
+  padding: 10px;
+  margin-right: 10px;
+}
+
+.submit-button {
+  position: absolute;
+  bottom: 8px;
+  right: 10px;
+  width: 40px; 
+  height: 40px;
+  border-radius: 50%;
+  background-image: url('/send.jpg'); 
+  background-size: cover;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.list-container {
+  height: 82vh;
+  overflow-y: auto; 
+  width: 20%;
+  background-color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.room-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+  color: #000000;
+}
+
+.room-item:hover {
+  background-color: #f1f1f1;
+}
+
+.room-name {
+  font-weight: bold;
+  flex-grow: 1;
+  font-size: 1.1em;
+  text-align: center;
+  color: #071bfb7e; 
+}
+
+.room-id {
+  text-align: right;
+  font-size: 0.75em;
+  flex-shrink: 0;
+  color: #071bfb7e; 
+}
+
+.home-header {
+  border: 1px solid #ccc;
+  width: 100%;
+  height: 10%;
+  border-bottom: none;
+  display: inline-block;
+  background-color: #071bfb7e;
+  margin: 0;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+.search-message {
+  position: absolute;
+  top: 19%; 
+  left: 15%;
+  width: 68%; 
+  background-color: #ffffff;
+  padding: 10px;
+  border-radius: 25px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.search-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px; 
+  height: 30px;
+  border-radius: 50%;
+  background-image: url('/search.jpg'); 
+  background-size: cover;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.profile-button {
+  position: absolute;
+  top: 270px;
+  right: 590px;
+  width: 200px; 
+  height: 200px;
+  border-radius: 50%;
+  background-image: url('/profile.png'); 
+  background-size: cover;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.logout-button {
+  position: absolute;
+  top: 270px;
+  right: 290px;
+  width: 200px; 
+  height: 200px;
+  border-radius: 50%;
+  background-image: url('/logout.jpg'); 
+  background-size: cover;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.login-button {
+  position: absolute;
+  top: 270px;
+  right: 590px;
+  width: 200px; 
+  height: 200px;
+  border-radius: 50%;
+  background-image: url('/login.png'); 
+  background-size: cover;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.signup-button {
+  position: absolute;
+  top: 270px;
+  right: 290px;
+  width: 200px; 
+  height: 200px;
+  border-radius: 50%;
+  background-image: url('/signup.png'); 
+  background-size: cover;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.My-Profile {
+  position: absolute;
+  color: #000000;
+  top: 73%; 
+  left: 41%;
+  font-size: 1.4em;
+}
+
+.Log-In {
+  position: absolute;
+  color: #000000;
+  top: 73%; 
+  left: 42%;
+  font-size: 1.4em;
+}
+
+.Log-Out {
+  position: absolute;
+  color: #000000;
+  top: 73%; 
+  left: 65%;
+  font-size: 1.4em;
+}
+
+.profile-container {
+  position: absolute;
+  top: 35%;
+  left: 36%;
+  height: 60vh;
+  overflow-y: auto; 
+  width: 50%;
+  background-color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.profile {
+  font-size: 1.2em;
+  margin-left: 5px;
+  text-align: center;
+}
+
+.goback-button {
+  position: absolute;
+  top: 22%;
+  left: 25%;
+  width: 60px; 
+  height: 60px;
+  border-radius: 50%;
+  background-image: url('/333.jpg'); 
+  background-size: cover;
+  border: none;
+  cursor: pointer;
 }
