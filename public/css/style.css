@@ -27,7 +27,7 @@ h4 {
   position: absolute;
   color: #000000;
   top: 22%; 
-  left: 55%;
+  left: 45%;
   font-size: 1.7em;
 }
 
@@ -66,8 +66,8 @@ input[type="submit"]:hover {
 
 .create-button {
   position: absolute;
-  bottom: 30px;
-  left: 105px;
+  bottom: 5%;
+  left: 8.5%;
   width: 40px; 
   height: 40px;
   border-radius: 50%;
@@ -283,10 +283,10 @@ a:hover {
 
 .profile-button {
   position: absolute;
-  top: 270px;
-  right: 590px;
-  width: 200px; 
-  height: 200px;
+  top: 38%;
+  right: 47%;
+  width: 140px; 
+  height: 140px;
   border-radius: 50%;
   background-image: url('/profile.png'); 
   background-size: cover;
@@ -297,10 +297,10 @@ a:hover {
 
 .logout-button {
   position: absolute;
-  top: 270px;
-  right: 290px;
-  width: 200px; 
-  height: 200px;
+  top: 38%;
+  right: 23%;
+  width: 140px; 
+  height: 140px;
   border-radius: 50%;
   background-image: url('/logout.jpg'); 
   background-size: cover;
@@ -311,10 +311,10 @@ a:hover {
 
 .login-button {
   position: absolute;
-  top: 270px;
-  right: 590px;
-  width: 200px; 
-  height: 200px;
+  top: 38%;
+  right: 47%;
+  width: 140px; 
+  height: 140px;
   border-radius: 50%;
   background-image: url('/login.png'); 
   background-size: cover;
@@ -325,10 +325,10 @@ a:hover {
 
 .signup-button {
   position: absolute;
-  top: 270px;
-  right: 290px;
-  width: 200px; 
-  height: 200px;
+  top: 38%;
+  right: 23%;
+  width: 140px; 
+  height: 140px;
   border-radius: 50%;
   background-image: url('/signup.png'); 
   background-size: cover;
@@ -340,24 +340,24 @@ a:hover {
 .My-Profile {
   position: absolute;
   color: #000000;
-  top: 73%; 
-  left: 41%;
+  top: 65%; 
+  right: 50%;
   font-size: 1.4em;
 }
 
 .Log-In {
   position: absolute;
   color: #000000;
-  top: 73%; 
-  left: 42%;
+  top: 65%; 
+  right: 50%;
   font-size: 1.4em;
 }
 
 .Log-Out {
   position: absolute;
   color: #000000;
-  top: 73%; 
-  left: 65%;
+  top: 65%; 
+  right: 25%;
   font-size: 1.4em;
 }
 

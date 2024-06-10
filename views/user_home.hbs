@@ -21,7 +21,7 @@
 
     <h3>Welcome to your homepage, {{username}}!</h3><br>
     <div class="My-Profile">
-        <span>My Profile</span>
+        <span>Profile</span>
     </div>
 
     <div class="Log-Out">
@@ -136,6 +136,7 @@
                     if (result.token) {
                         alert('Log In successful');
                         // Save token and update UI
+                        localStorage.setItem('username', result.username);
                         localStorage.setItem('token', result.token);
                         updateAuthUI(result.username);
                         window.location.href = `http://localhost:8080/user/${result.username}`; // Redirect to the new URL

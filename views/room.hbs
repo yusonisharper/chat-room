@@ -32,7 +32,7 @@
     </div>
 
 <script>
-    var nickName = prompt("Please enter your name", "nickName");
+    var nickName = localStorage.getItem('username');
     var msgList = [];
     var searchText = '';
     const msgContainer = document.getElementById('msgList');
