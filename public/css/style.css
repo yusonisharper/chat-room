@@ -31,6 +31,14 @@ h4 {
   font-size: 1.7em;
 }
 
+h5 {
+  position: absolute;
+  color: #000000;
+  top: 20%; 
+  left: 55%;
+  font-size: 1.7em;
+}
+
 #msgList {
   position: fixed;
   top: 26%; 
@@ -393,4 +401,13 @@ a:hover {
   background-size: cover;
   border: none;
   cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  h3{
+    display: none;
+  }
+  h4{
+    display: none;
+  }
 }
